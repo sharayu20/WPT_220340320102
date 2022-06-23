@@ -1,0 +1,180 @@
+
+<html>
+	<head>
+</html><script src="jquery-3.5.1.min.js"></script>
+<script>
+$( ()=>{
+	$("#bookid").disabled=false;
+
+
+
+	//ON BLUR
+
+	$("#bookid").blur(()=>{
+
+	
+	let y=$("#bookid").val();
+
+	$("#bookid").disabled=true;
+
+	let ajaxparams={
+	  data:{ x:y},
+	  url: "http://127.0.0.1:5500",
+	  type:'get',
+	  dataType: "json",
+	  success:(output)=>{
+
+	if(output.bookfoundstatus)
+	{
+	$("#msg1").text("book details found");
+
+	$("#bookname").val(output.bookdetails.bookname);
+
+	$("#price").val(output.bookdetails.price);
+
+
+	$("#content").text(output.bookdetails.bookid+" "+output.bookdetails.bookname+" "+output.bookdetails.price);
+	$("");
+	
+	}
+
+	else
+	{
+
+	$("#msg1").text("book details found");
+	$("#bookname").val("");
+	$("#price").val("");
+
+	}
+	},
+	  error:(error)=>{ console.log("failure " + error)}
+
+	};//end of the object creation for ajaxparams
+	$.ajax(ajaxparams);
+
+  });
+
+
+
+	// INSERT
+
+$("#add").click(()=>{
+
+
+let x=$("#bookid").val();
+let y=$("#bookname").val();
+let z=$("#price").val();
+
+document.querySelector("#bookid").disabled=true;
+
+let ajaxparams={
+data:{ a:x,b:y,c:z},
+url: "http://127.0.0.1:5500",
+type:'get',
+dataType: "json",
+success:(output)=>{
+
+if(output.bookfoundstatus)
+{
+$("#msg1").text("book was added");
+
+}
+
+else
+{
+
+
+// $("#bookid").val("");
+// $("#bookname").val("");
+// $("#price").val("");
+$("#msg1").text("book was not added");
+}
+},
+error:(error)=>{ 
+	console.log("failure " + error)}
+
+};//end of the object creation for ajaxparams
+$.ajax(ajaxparams);
+
+});
+
+;
+
+
+//View all
+
+$("#viewall").click(()=>{
+
+	$("#bookid").disabled=false;
+//difficult things begin
+//the below line is input
+
+
+let ajaxparams={
+data:{ a:x,b:y,c:z},
+url: "http://127.0.0.1:5500",
+type:'get',
+dataType: "json",
+success:(output)=>{
+	book=output;
+	let bookcontents="";
+
+for(let i=0; i < book.length;i++)
+  {
+  bookcontents += "<br/>" + book[i].bookid + "  " + book[i].bookname + " " + book[i].price;
+  }
+  $("#contents").html(bookcontents);
+
+},
+error:(error)=>{ console.log("failure " + error)}
+
+};//end of the object creation for ajaxparams
+$.ajax(ajaxparams);
+
+});
+
+
+
+
+
+
+});
+	
+		</script>
+		</head>
+<body>
+<!---
+<form action="poc2" method="get">
+<Br/>whocares<input type="text" name="whocares"/>
+<input type="submit" value="get"/>
+</form>
+
+<form action="poc1" method="post">
+<Br/>whocares<input type="text" name="whocares"/>
+<input type="submit" value="post"/>
+</form>
+
+<button id="b2"> jquery works</button>
+
+-->
+<input type ="text" id="bookid" placeholder="bookid">
+<span id="msg1">what happened book added or not</span>
+<br/>
+<input type ="text" id="bookname" placeholder="bookname">
+<br/>
+
+<input type ="text" id="price" placeholder="price">
+<br/>
+<br/>
+<button id="add ">Add a Book</button>
+<br/>
+<!--<button id="viewall ">show all the book</button>
+<hr/>
+-->
+<p id="content" >all book show here</p> 
+</body>
+
+
+
+
+</html>
